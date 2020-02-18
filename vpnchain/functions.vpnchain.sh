@@ -4,7 +4,7 @@
 
 # Make openvpn connection
 function CONNECT() {
-    openvpn --verb $verbose --script-security 2 --config ${config[$i]} --dev $client_tun --remote $client_remote_ip --route-nopull $openvpn_route --up "$openvpn_up" --down "$openvpn_down" &
+    openvpn --verb $verbose --script-security 2 --config ${config[$i]} --dev $client_tun --remote $client_remote_ip --route-nopull --allow-pull-fqdn $openvpn_route --up "$openvpn_up" --down "$openvpn_down" &
 }
 
 # Get available tun devices
@@ -112,11 +112,11 @@ function FIREWALL() {
 
  if [ "$1" = "flush" ]; then        
     if [ -f "$firewall_rules_file" ]; then
-    flush_rules=$(grep -v '^#' $firewall_rules_file);
-    grep -v '^#' $firewall_rules_file | while read LINE ; do        
-	SHOW info "Deleting rule: $LINE"
-        $LINE
-    done
+      flush_rules=$(grep -v '^#' $firewall_rules_file);
+      grep -v '^#' $firewall_rules_file | while read LINE ; do        
+        SHOW info "Deleting rule: $LINE"
+          $LINE
+        done
     
     else
         SHOW error "No firewall rules file. Nothing to flush!"

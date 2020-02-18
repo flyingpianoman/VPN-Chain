@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  vpn-chain-proxy:
+    container_name: vpn-chain-proxy
+    # sysctls:
+    #   - net.ipv6.conf.all.disable_ipv6=1
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./config:/config
+    ports:
+      - 8888:8888
